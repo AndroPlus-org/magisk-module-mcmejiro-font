@@ -1,0 +1,8 @@
+id=font-mcmejiro
+name=McMejiro Font
+version=v12
+versionCode=12
+author=AndroPlus
+description=McMejiro font patch for Japanese users.
+donate=https://github.com/sponsors/AndroPlus-org?frequency=one-time
+updateJson=https://raw.githubusercontent.com/AndroPlus-org/magisk-module-mcmejiro-font/master/update.json
