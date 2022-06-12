@@ -9,6 +9,9 @@ Tested on Google Pixel 6 Pro (Android 12).
 
 ## Change log
 
+#### v14
+* Replace vivo font
+
 #### v13
 * Force replace MiSansVF
 
