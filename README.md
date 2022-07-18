@@ -9,6 +9,9 @@ Tested on Google Pixel 6 Pro (Android 12).
 
 ## Change log
 
+#### v15
+* Support MIUI 13
+
 #### v14
 * Replace vivo font
 
