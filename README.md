@@ -9,6 +9,9 @@ Tested on Google Pixel 6 Pro (Android 12).
 
 ## Change log
 
+#### v16
+* Support ColorOS 12.1
+
 #### v15
 * Support MIUI 13
 
