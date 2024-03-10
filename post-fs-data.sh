@@ -13,6 +13,33 @@ APILEVEL=$(getprop ro.build.version.sdk)
 mkdir -p $MODDIR/system/etc $MODDIR/system/system_ext/etc $MODDIR/system/product/etc
 cp /system/etc/fonts.xml $MODDIR/system/etc
 
+#Add workaround for Xiaomi HyperOS
+MIVERSION=$(getprop ro.miui.ui.version.code)
+if [ $MIVERSION -ge 816 ]
+then
+	if [ ! -f /data/system/theme/fonts/Roboto-Regular.ttf ]; then
+		mkdir /data/system/theme/fonts
+		cp $MODDIR/system/fonts/McMejiro-Regular.ttf /data/system/theme/fonts/Roboto-Regular.ttf
+		cp $MODDIR/system/fonts/McMejiro-Bold.ttf /data/system/theme/fonts/Roboto-Bold.ttf
+		ln -s /data/system/theme/fonts/Roboto-Bold.ttf /data/system/theme/fonts/Miui-Bold.ttf
+		ln -s /data/system/theme/fonts/Roboto-Regular.ttf /data/system/theme/fonts/Miui-Regular.ttf
+		ln -s /data/system/theme/fonts/Roboto-Bold.ttf /data/system/theme/fonts/MiuiEx-Bold.ttf
+		ln -s /data/system/theme/fonts/Roboto-Regular.ttf /data/system/theme/fonts/MiuiEx-Light.ttf
+		ln -s /data/system/theme/fonts/Roboto-Regular.ttf /data/system/theme/fonts/MiuiEx-Regular.ttf
+		ln -s /data/system/theme/fonts/Roboto-Bold.ttf /data/system/theme/fonts/Roboto-Black.ttf
+		ln -s /data/system/theme/fonts/Roboto-Bold.ttf /data/system/theme/fonts/Roboto-BlackItalic.ttf
+		ln -s /data/system/theme/fonts/Roboto-Bold.ttf /data/system/theme/fonts/Roboto-BoldItalic.ttf
+		ln -s /data/system/theme/fonts/Roboto-Regular.ttf /data/system/theme/fonts/Roboto-Italic.ttf
+		ln -s /data/system/theme/fonts/Roboto-Regular.ttf /data/system/theme/fonts/Roboto-Light.ttf
+		ln -s /data/system/theme/fonts/Roboto-Regular.ttf /data/system/theme/fonts/Roboto-LightItalic.ttf
+		ln -s /data/system/theme/fonts/Roboto-Bold.ttf /data/system/theme/fonts/Roboto-Medium.ttf
+		ln -s /data/system/theme/fonts/Roboto-Bold.ttf /data/system/theme/fonts/Roboto-MediumItalic.ttf
+		ln -s /data/system/theme/fonts/Roboto-Regular.ttf /data/system/theme/fonts/Roboto-ThinItalic.ttf
+		ln -s /data/system/theme/fonts/Roboto-Regular.ttf /data/system/theme/fonts/Roboto-ThinItalic.ttf
+		chown -R system_theme /data/system/theme/fonts
+	fi
+fi
+
 #Function to remove original ja
 remove_ja() {
   sed -i -e '/<family lang="ja"/,/<\/family>/d' $1
@@ -74,6 +101,7 @@ fi
 
 #Goodbye, Xiaomi Font
 /system/bin/sed -i -z 's@<family name="sans-serif">\n    <!-- # MIUI Edit Start -->.*<!-- # MIUI Edit END -->@<family name="sans-serif">@' $MODDIR/system/etc/fonts.xml
+#/system/bin/sed -i -z 's@<family name="sans-serif">\n    <!-- For WebView font -->.*<font weight="100" style="normal">Roboto@<family name="sans-serif">\n      <font weight="100" style="normal">Roboto@' $MODDIR/system/etc/fonts.xml
 sed -i 's@MiSansVF.ttf@Roboto-Regular.ttf@g' $MODDIR/system/etc/fonts.xml
 if [ -e /system/fonts/MiSansVF.ttf ]; then
 	cp /system/fonts/Roboto-Regular.ttf $MODDIR/system/fonts/MiSansVF.ttf
