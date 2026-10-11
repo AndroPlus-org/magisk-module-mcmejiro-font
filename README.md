@@ -3,6 +3,12 @@
 McMejiro font patch for Japanese users.
 Tested on Google Pixel 6 Pro (Android 12).
 
+#### Changelog
+
+v24
+* Android 15+: patch the original `font_fallback.xml` instead of overwriting it with `fonts.xml` (fix font not applied on Android 16)
+* Do not overwrite the Google Sans fix in product `fonts_customization.xml`
+
 #### NOTICE
 
 * You should use latest Magisk Manager to install this module. If you meet any problem under installation from Magisk Manager, please try to install it from recovery.
