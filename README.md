@@ -6,8 +6,9 @@ Tested on Google Pixel 6 Pro (Android 12).
 #### Changelog
 
 v24
-* Android 15+: patch the original `font_fallback.xml` instead of overwriting it with `fonts.xml` (fix font not applied on Android 16)
-* Do not overwrite the Google Sans fix in product `fonts_customization.xml`
+* Use variable font (`McMejiro-VF.ttf`, wght 100-900) instead of static fonts
+* Android 15+: patch the original `font_fallback.xml` instead of overwriting it with `fonts.xml` (fix crash on Android 16 / 17)
+* McMejiro 20261011 (fix faded Latin glyphs caused by broken hinting)
 
 #### NOTICE
 

@@ -9,22 +9,18 @@ MODDIR=${0%/*}
 
 APILEVEL=$(getprop ro.build.version.sdk)
 
+#McMejiro variable font (wght 100-900)
+FONT=McMejiro-VF.ttf
+
 if [ -e $MODDIR/system/fonts/disable-extra-weights ] ; then
-	WEIGHTS="300 400 600 700"
+	WEIGHTS="300 400 500 600 700"
 else
-	WEIGHTS="100 300 400 600 700 800"
+	WEIGHTS="100 200 300 400 500 600 700 800 900"
 fi
 
-#Font file name of each weight
-mcmejiro() {
-	case $1 in
-		100) echo McMejiro-Thin.ttf ;;
-		300) echo McMejiro-Light.ttf ;;
-		600) echo McMejiro-Semibold.ttf ;;
-		700) echo McMejiro-Bold.ttf ;;
-		800) echo McMejiro-Extrabold.ttf ;;
-		*) echo McMejiro-Regular.ttf ;;
-	esac
+#Font file name with wght axis (for replacing static fonts)
+mejiro() {
+	echo "$FONT<axis tag=\"wght\" stylevalue=\"$1\" />"
 }
 
 #Font entries of ja family
@@ -39,7 +35,7 @@ ja_fonts() {
 		attr="$attr fallbackFor=\"$fallback\""
 	fi
 	for w in $WEIGHTS ; do
-		printf '        <font weight="%s" style="normal"%s>%s</font>\\n' $w "$attr" "$(mcmejiro $w)"
+		printf '        <font weight="%s" style="normal"%s>%s</font>\\n' $w "$attr" "$(mejiro $w)"
 	done
 }
 
@@ -86,8 +82,8 @@ patch_fonts_xml() {
 	sed -i 's@MiSansVF_Overlay.ttf@Roboto-Regular.ttf@g' $xml
 
 	#Goodbye, vivo Font
-	sed -i 's@VivoFont.ttf@McMejiro-Regular.ttf@g' $xml
-	sed -i 's@DroidSansFallbackBBK.ttf@McMejiro-Regular.ttf@g' $xml
+	sed -i "s@VivoFont.ttf@$FONT@g" $xml
+	sed -i "s@DroidSansFallbackBBK.ttf@$FONT@g" $xml
 
 	#Goodbye, Sansita Font
 	sed -i 's@Sansita-@Roboto-@g' $xml
@@ -162,13 +158,13 @@ if [ -e /system/etc/$opslate ]; then
 	remove_ja $MODDIR/system/etc/$opslate
 	add_ja $MODDIR/system/etc/$opslate
 
-	sed -i 's@SlateForOnePlus-Thin.ttf@McMejiro-Light.ttf@g' $MODDIR/system/etc/$opslate
-	sed -i 's@SlateForOnePlus-Light.ttf@McMejiro-Light.ttf@g' $MODDIR/system/etc/$opslate
-	sed -i 's@SlateForOnePlus-Book.ttf@McMejiro-Regular.ttf@g' $MODDIR/system/etc/$opslate
-	sed -i 's@SlateForOnePlus-Regular.ttf@McMejiro-Regular.ttf@g' $MODDIR/system/etc/$opslate
-	sed -i 's@SlateForOnePlus-Medium.ttf@McMejiro-Semibold.ttf@g' $MODDIR/system/etc/$opslate
-	sed -i 's@SlateForOnePlus-Bold.ttf@McMejiro-Bold.ttf@g' $MODDIR/system/etc/$opslate
-	sed -i 's@SlateForOnePlus-Black.ttf@McMejiro-Extrabold.ttf@g' $MODDIR/system/etc/$opslate
+	sed -i "s@SlateForOnePlus-Thin.ttf@$(mejiro 300)@g" $MODDIR/system/etc/$opslate
+	sed -i "s@SlateForOnePlus-Light.ttf@$(mejiro 300)@g" $MODDIR/system/etc/$opslate
+	sed -i "s@SlateForOnePlus-Book.ttf@$(mejiro 400)@g" $MODDIR/system/etc/$opslate
+	sed -i "s@SlateForOnePlus-Regular.ttf@$(mejiro 400)@g" $MODDIR/system/etc/$opslate
+	sed -i "s@SlateForOnePlus-Medium.ttf@$(mejiro 500)@g" $MODDIR/system/etc/$opslate
+	sed -i "s@SlateForOnePlus-Bold.ttf@$(mejiro 700)@g" $MODDIR/system/etc/$opslate
+	sed -i "s@SlateForOnePlus-Black.ttf@$(mejiro 900)@g" $MODDIR/system/etc/$opslate
 fi
 
 #Copy fonts_base.xml for OnePlus OxygenOS 11
@@ -199,11 +195,21 @@ fi
 #Function to replace OPLUS fonts in fonts_customization.xml
 replace_oplus() {
 	local xml=$1
+	#File names (with wght axis)
+	sed -i "s@OplusSansText-25Th.ttf@$(mejiro 300)@g" $xml
+	sed -i "s@OplusSansText-35ExLt.ttf@$(mejiro 300)@g" $xml
+	sed -i "s@OplusSansText-45Lt.ttf@$(mejiro 300)@g" $xml
+	sed -i "s@OplusSansText-55Rg.ttf@$(mejiro 400)@g" $xml
+	sed -i "s@OplusSansText-65Md.ttf@$(mejiro 500)@g" $xml
+	sed -i "s@NHGMYHOplusHK-W4.ttf@$(mejiro 400)@g" $xml
+	sed -i "s@NHGMYHOplusPRC-W4.ttf@$(mejiro 400)@g" $xml
+	sed -i "s@OplusSansDisplay-45Lt.ttf@$(mejiro 300)@g" $xml
+	#Other references (e.g. postScriptName)
 	sed -i 's@OplusSansText-25Th@McMejiro-Light@g' $xml
 	sed -i 's@OplusSansText-35ExLt@McMejiro-Light@g' $xml
 	sed -i 's@OplusSansText-45Lt@McMejiro-Light@g' $xml
 	sed -i 's@OplusSansText-55Rg@McMejiro-Regular@g' $xml
-	sed -i 's@OplusSansText-65Md@McMejiro-Semibold@g' $xml
+	sed -i 's@OplusSansText-65Md@McMejiro-Medium@g' $xml
 	sed -i 's@NHGMYHOplusHK-W4@McMejiro-Regular@g' $xml
 	sed -i 's@NHGMYHOplusPRC-W4@McMejiro-Regular@g' $xml
 	sed -i 's@OplusSansDisplay-45Lt@McMejiro-Light@g' $xml
